@@ -19,10 +19,51 @@ namespace DWL_CRM.Controllers
         }
 
         // GET: People
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? q, int? firmaId, string? sort)
         {
-            var appDbContext = _context.People.Include(p => p.Firma);
-            return View(await appDbContext.ToListAsync());
+            var query = _context.People.Include(p => p.Firma).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var search = q.Trim().ToLower();
+                query = query.Where(p =>
+                    (p.Vorname != null && p.Vorname.ToLower().Contains(search)) ||
+                    (p.Nachname != null && p.Nachname.ToLower().Contains(search)) ||
+                    (p.Email != null && p.Email.ToLower().Contains(search)) ||
+                    (p.Telefon != null && p.Telefon.ToLower().Contains(search)));
+            }
+
+            if (firmaId.HasValue)
+            {
+                query = query.Where(p => p.FirmaId == firmaId.Value);
+            }
+
+            query = sort switch
+            {
+                "name_desc" => query.OrderByDescending(p => p.Nachname).ThenByDescending(p => p.Vorname),
+                "firma_asc" => query.OrderBy(p => p.Firma.Firmenname).ThenBy(p => p.Nachname),
+                "firma_desc" => query.OrderByDescending(p => p.Firma.Firmenname).ThenBy(p => p.Nachname),
+                _ => query.OrderBy(p => p.Nachname).ThenBy(p => p.Vorname)
+            };
+
+            ViewData["CurrentQuery"] = q;
+            ViewData["CurrentFirmaId"] = firmaId;
+            ViewData["CurrentSort"] = sort;
+            ViewData["SortOptions"] = new List<SelectListItem>
+            {
+                new() { Value = "", Text = "Sortierung: Name A-Z", Selected = string.IsNullOrEmpty(sort) },
+                new() { Value = "name_desc", Text = "Name Z-A", Selected = sort == "name_desc" },
+                new() { Value = "firma_asc", Text = "Firma A-Z", Selected = sort == "firma_asc" },
+                new() { Value = "firma_desc", Text = "Firma Z-A", Selected = sort == "firma_desc" }
+            };
+            ViewData["FirmaFilter"] = new SelectList(
+                await _context.Firmas.OrderBy(f => f.Firmenname).ToListAsync(),
+                "FirmaId",
+                "Firmenname",
+                firmaId
+            );
+
+            return View(await query.ToListAsync());
         }
 
         // GET: People/Details/5

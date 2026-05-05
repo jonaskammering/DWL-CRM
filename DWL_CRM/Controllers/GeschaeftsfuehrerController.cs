@@ -19,10 +19,36 @@ namespace DWL_CRM.Controllers
         }
 
         // GET: Geschaeftsfuehrers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? q, string? sort)
         {
-            var appDbContext = _context.Geschaeftsfuehrers.Include(g => g.Person);
-            return View(await appDbContext.ToListAsync());
+            var query = _context.Geschaeftsfuehrers
+                .Include(g => g.Person)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var search = q.Trim().ToLower();
+                query = query.Where(g =>
+                    (g.Person.Vorname != null && g.Person.Vorname.ToLower().Contains(search)) ||
+                    (g.Person.Nachname != null && g.Person.Nachname.ToLower().Contains(search)) ||
+                    (g.Person.Email != null && g.Person.Email.ToLower().Contains(search)));
+            }
+
+            query = sort switch
+            {
+                "name_desc" => query.OrderByDescending(g => g.Person.Nachname).ThenByDescending(g => g.Person.Vorname),
+                _ => query.OrderBy(g => g.Person.Nachname).ThenBy(g => g.Person.Vorname)
+            };
+
+            ViewData["CurrentQuery"] = q;
+            ViewData["CurrentSort"] = sort;
+            ViewData["SortOptions"] = new List<SelectListItem>
+            {
+                new() { Value = "", Text = "Sortierung: Name A-Z", Selected = string.IsNullOrEmpty(sort) },
+                new() { Value = "name_desc", Text = "Name Z-A", Selected = sort == "name_desc" }
+            };
+
+            return View(await query.ToListAsync());
         }
 
         // GET: Geschaeftsfuehrers/Details/5

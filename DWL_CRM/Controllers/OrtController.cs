@@ -19,9 +19,37 @@ namespace DWL_CRM.Controllers
         }
 
         // GET: Ort
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? q, string? sort)
         {
-            return View(await _context.Orts.ToListAsync());
+            var query = _context.Orts.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var search = q.Trim().ToLower();
+                query = query.Where(o =>
+                    o.Ortsname.ToLower().Contains(search) ||
+                    o.Plz.ToLower().Contains(search));
+            }
+
+            query = sort switch
+            {
+                "plz_desc" => query.OrderByDescending(o => o.Plz),
+                "name_asc" => query.OrderBy(o => o.Ortsname),
+                "name_desc" => query.OrderByDescending(o => o.Ortsname),
+                _ => query.OrderBy(o => o.Plz)
+            };
+
+            ViewData["CurrentQuery"] = q;
+            ViewData["CurrentSort"] = sort;
+            ViewData["SortOptions"] = new List<SelectListItem>
+            {
+                new() { Value = "", Text = "Sortierung: PLZ aufsteigend", Selected = string.IsNullOrEmpty(sort) },
+                new() { Value = "plz_desc", Text = "PLZ absteigend", Selected = sort == "plz_desc" },
+                new() { Value = "name_asc", Text = "Ortsname A-Z", Selected = sort == "name_asc" },
+                new() { Value = "name_desc", Text = "Ortsname Z-A", Selected = sort == "name_desc" }
+            };
+
+            return View(await query.ToListAsync());
         }
 
         // GET: Ort/Details/5

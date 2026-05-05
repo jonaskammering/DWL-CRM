@@ -75,7 +75,7 @@
                                     <td>
                                         @if (person.Geschaeftsfuehrers.Any())
                                         {
-                                            <span class="badge rounded-pill text-bg-primary me-1">Geschaeftsfuehrer</span>
+                                            <span class="badge rounded-pill text-bg-primary me-1">Geschäftsführer</span>
                                         }
                                         @if (person.Ansprechpeople.Any())
                                         {
@@ -106,7 +106,7 @@
     <div class="col-12 col-xl-5">
         <section class="crm-card mb-4">
             <div class="section-header">
-                <h2 class="crm-card-title">Geschaeftsfuehrer</h2>
+                <h2 class="crm-card-title">Geschäftsführer</h2>
                 <a class="btn btn-sm btn-outline-primary" asp-controller="Geschaeftsfuehrer" asp-action="Index">Verwalten</a>
             </div>
             @if (geschaeftsfuehrer.Any())
@@ -123,7 +123,7 @@
             }
             else
             {
-                <p class="empty-state">Keine Geschaeftsfuehrer zugeordnet.</p>
+                <p class="empty-state">Keine Geschäftsführer zugeordnet.</p>
             }
         </section>
 

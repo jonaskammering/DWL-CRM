@@ -172,6 +172,11 @@ h4 {
   margin-bottom: 0.75rem;
 }
 
+.crm-card form.row {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
 .empty-state {
   margin: 0;
   color: var(--text-muted);

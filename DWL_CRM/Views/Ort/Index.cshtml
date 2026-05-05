@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Orte";
+    var currentQuery = ViewData["CurrentQuery"] as string;
+    var currentSort = ViewData["CurrentSort"] as string;
 }
 
 <div class="page-header">
@@ -12,6 +14,18 @@
 </div>
 
 <div class="crm-card">
+<form method="get" class="row g-2 mb-3">
+    <div class="col-12 col-md-7">
+        <input class="form-control" type="text" name="q" value="@currentQuery" placeholder="Suche nach PLZ oder Ortsname..." />
+    </div>
+    <div class="col-6 col-md-3">
+        <select class="form-select" name="sort" asp-items="@(ViewData["SortOptions"] as IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)"></select>
+    </div>
+    <div class="col-6 col-md-2 d-grid d-md-flex gap-2">
+        <button type="submit" class="btn btn-primary w-100">Filtern</button>
+        <a asp-action="Index" class="btn btn-outline-secondary w-100">Reset</a>
+    </div>
+</form>
 <div class="table-responsive">
 <table class="table table-hover align-middle mb-0">
     <thead>

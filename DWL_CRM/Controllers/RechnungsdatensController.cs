@@ -19,10 +19,59 @@ namespace DWL_CRM.Controllers
         }
 
         // GET: Rechnungsdatens
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? q, string? status, string? sort)
         {
-            var appDbContext = _context.Rechnungsdatens.Include(r => r.Firma);
-            return View(await appDbContext.ToListAsync());
+            var query = _context.Rechnungsdatens
+                .Include(r => r.Firma)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var search = q.Trim().ToLower();
+                query = query.Where(r => r.Firma.Firmenname.ToLower().Contains(search));
+            }
+
+            if (status == "offen")
+            {
+                query = query.Where(r => (r.RechnungenOffen ?? 0m) > 0m);
+            }
+            else if (status == "ausgeglichen")
+            {
+                query = query.Where(r => (r.RechnungenOffen ?? 0m) <= 0m);
+            }
+
+            query = sort switch
+            {
+                "offen_desc" => query.OrderByDescending(r => r.RechnungenOffen ?? 0m),
+                "offen_asc" => query.OrderBy(r => r.RechnungenOffen ?? 0m),
+                "gesamt_desc" => query.OrderByDescending(r => r.RechnungenGesamt ?? 0m),
+                "gesamt_asc" => query.OrderBy(r => r.RechnungenGesamt ?? 0m),
+                "datum_desc" => query.OrderByDescending(r => r.LetzterZahlungseingang),
+                "datum_asc" => query.OrderBy(r => r.LetzterZahlungseingang),
+                _ => query.OrderBy(r => r.Firma.Firmenname)
+            };
+
+            ViewData["CurrentQuery"] = q;
+            ViewData["CurrentStatus"] = status;
+            ViewData["CurrentSort"] = sort;
+            ViewData["StatusOptions"] = new List<SelectListItem>
+            {
+                new() { Value = "", Text = "Status: Alle", Selected = string.IsNullOrEmpty(status) },
+                new() { Value = "offen", Text = "Nur offene", Selected = status == "offen" },
+                new() { Value = "ausgeglichen", Text = "Nur ausgeglichene", Selected = status == "ausgeglichen" }
+            };
+            ViewData["SortOptions"] = new List<SelectListItem>
+            {
+                new() { Value = "", Text = "Sortierung: Firma A-Z", Selected = string.IsNullOrEmpty(sort) },
+                new() { Value = "offen_desc", Text = "Offen hoch-niedrig", Selected = sort == "offen_desc" },
+                new() { Value = "offen_asc", Text = "Offen niedrig-hoch", Selected = sort == "offen_asc" },
+                new() { Value = "gesamt_desc", Text = "Gesamt hoch-niedrig", Selected = sort == "gesamt_desc" },
+                new() { Value = "gesamt_asc", Text = "Gesamt niedrig-hoch", Selected = sort == "gesamt_asc" },
+                new() { Value = "datum_desc", Text = "Zahlung neu-alt", Selected = sort == "datum_desc" },
+                new() { Value = "datum_asc", Text = "Zahlung alt-neu", Selected = sort == "datum_asc" }
+            };
+
+            return View(await query.ToListAsync());
         }
 
         // GET: Rechnungsdatens/Details/5

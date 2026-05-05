@@ -19,10 +19,36 @@ namespace DWL_CRM.Controllers
         }
 
         // GET: Ansprechpersons
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? q, string? sort)
         {
-            var appDbContext = _context.Ansprechpeople.Include(a => a.Person);
-            return View(await appDbContext.ToListAsync());
+            var query = _context.Ansprechpeople
+                .Include(a => a.Person)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var search = q.Trim().ToLower();
+                query = query.Where(a =>
+                    (a.Person.Vorname != null && a.Person.Vorname.ToLower().Contains(search)) ||
+                    (a.Person.Nachname != null && a.Person.Nachname.ToLower().Contains(search)) ||
+                    (a.Person.Email != null && a.Person.Email.ToLower().Contains(search)));
+            }
+
+            query = sort switch
+            {
+                "name_desc" => query.OrderByDescending(a => a.Person.Nachname).ThenByDescending(a => a.Person.Vorname),
+                _ => query.OrderBy(a => a.Person.Nachname).ThenBy(a => a.Person.Vorname)
+            };
+
+            ViewData["CurrentQuery"] = q;
+            ViewData["CurrentSort"] = sort;
+            ViewData["SortOptions"] = new List<SelectListItem>
+            {
+                new() { Value = "", Text = "Sortierung: Name A-Z", Selected = string.IsNullOrEmpty(sort) },
+                new() { Value = "name_desc", Text = "Name Z-A", Selected = sort == "name_desc" }
+            };
+
+            return View(await query.ToListAsync());
         }
 
         // GET: Ansprechpersons/Details/5
