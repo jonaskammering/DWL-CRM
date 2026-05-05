@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DWL_CRM.Models.Firma>
+﻿@model IEnumerable<DWL_CRM.ViewModels.FirmaIndexItemViewModel>
 
 @{
     ViewData["Title"] = "Firmen";
@@ -12,30 +12,39 @@
 </div>
 
 <div class="crm-card">
+<p class="text-muted mb-3">
+    ABC-Kategorisierung nach kumuliertem Jahresumsatz:
+    <span class="badge abc-badge abc-a">A</span> bis 80%,
+    <span class="badge abc-badge abc-b">B</span> bis 95%,
+    <span class="badge abc-badge abc-c">C</span> Rest.
+</p>
 <div class="table-responsive">
 <table class="table table-hover align-middle mb-0">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Firmenname)
+                Firma
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Strasse)
+                ABC
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Branche)
+                Strasse
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gruendungsdatum)
+                Branche
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Jahresumsatz)
+                Gruendungsdatum
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bemerkungen)
+                Jahresumsatz
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ort)
+                Bemerkungen
+            </th>
+            <th>
+                Ort
             </th>
             <th></th>
         </tr>
@@ -44,30 +53,33 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Firmenname)
+                @item.Firma.Firmenname
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Strasse)
+                <span class="badge abc-badge abc-@item.AbcKategorie.ToLowerInvariant()">@item.AbcKategorie</span>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Branche)
+                @item.Firma.Strasse
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gruendungsdatum)
+                @item.Firma.Branche
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Jahresumsatz)
+                @item.Firma.Gruendungsdatum
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Bemerkungen)
+                @item.Firma.Jahresumsatz
             </td>
             <td>
-                @(item.Ort != null ? $"{item.Ort.Plz} {item.Ort.Ortsname}" : "-")
+                @item.Firma.Bemerkungen
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FirmaId">Bearbeiten</a> |
-                <a asp-action="Details" asp-route-id="@item.FirmaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FirmaId">Loeschen</a>
+                @(item.Firma.Ort != null ? $"{item.Firma.Ort.Plz} {item.Firma.Ort.Ortsname}" : "-")
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Firma.FirmaId">Bearbeiten</a> |
+                <a asp-action="Details" asp-route-id="@item.Firma.FirmaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Firma.FirmaId">Loeschen</a>
             </td>
         </tr>
 }

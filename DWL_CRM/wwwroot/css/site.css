@@ -211,6 +211,27 @@ table.table td {
   color: var(--dwl-blue) !important;
 }
 
+.abc-badge {
+  min-width: 2rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+
+.abc-a {
+  background-color: var(--dwl-blue);
+  color: var(--dwl-white);
+}
+
+.abc-b {
+  background-color: var(--dwl-yellow);
+  color: var(--dwl-blue);
+}
+
+.abc-c {
+  background-color: var(--dwl-khaki);
+  color: var(--dwl-blue);
+}
+
 .form-control:focus,
 .form-select:focus,
 .btn:focus,

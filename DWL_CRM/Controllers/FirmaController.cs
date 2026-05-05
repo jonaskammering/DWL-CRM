@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DWL_CRM.Models;
+using DWL_CRM.ViewModels;
 
 namespace DWL_CRM.Controllers
 {
@@ -21,8 +22,43 @@ namespace DWL_CRM.Controllers
         // GET: Firmas
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Firmas.Include(f => f.Ort);
-            return View(await appDbContext.ToListAsync());
+            var firmen = await _context.Firmas
+                .Include(f => f.Ort)
+                .OrderByDescending(f => f.Jahresumsatz ?? 0m)
+                .ThenBy(f => f.Firmenname)
+                .ToListAsync();
+
+            var totalUmsatz = firmen.Sum(f => f.Jahresumsatz ?? 0m);
+            decimal kumulierterUmsatz = 0m;
+
+            var model = new List<FirmaIndexItemViewModel>(firmen.Count);
+            foreach (var firma in firmen)
+            {
+                var umsatz = firma.Jahresumsatz ?? 0m;
+                kumulierterUmsatz += umsatz;
+
+                var kategorie = "C";
+                if (totalUmsatz > 0)
+                {
+                    var anteil = kumulierterUmsatz / totalUmsatz;
+                    if (anteil <= 0.80m)
+                    {
+                        kategorie = "A";
+                    }
+                    else if (anteil <= 0.95m)
+                    {
+                        kategorie = "B";
+                    }
+                }
+
+                model.Add(new FirmaIndexItemViewModel
+                {
+                    Firma = firma,
+                    AbcKategorie = kategorie
+                });
+            }
+
+            return View(model);
         }
 
         // GET: Firmas/Details/5
