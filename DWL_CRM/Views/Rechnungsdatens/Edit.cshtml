@@ -1,0 +1,49 @@
+﻿@model DWL_CRM.Models.Rechnungsdaten
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Rechnungsdaten</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RechnungsdatenId" />
+            <div class="form-group">
+                <label asp-for="FirmaId" class="control-label"></label>
+                <select asp-for="FirmaId" class="form-control" asp-items="ViewBag.FirmaId"></select>
+                <span asp-validation-for="FirmaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RechnungenGesamt" class="control-label"></label>
+                <input asp-for="RechnungenGesamt" class="form-control" />
+                <span asp-validation-for="RechnungenGesamt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RechnungenOffen" class="control-label"></label>
+                <input asp-for="RechnungenOffen" class="form-control" />
+                <span asp-validation-for="RechnungenOffen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LetzterZahlungseingang" class="control-label"></label>
+                <input asp-for="LetzterZahlungseingang" class="form-control" />
+                <span asp-validation-for="LetzterZahlungseingang" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

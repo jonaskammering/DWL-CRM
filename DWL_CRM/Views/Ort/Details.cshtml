@@ -1,0 +1,30 @@
+﻿@model DWL_CRM.Models.Ort
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Ort</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Plz)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Plz)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ortsname)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ortsname)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.OrtId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

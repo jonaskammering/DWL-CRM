@@ -1,0 +1,177 @@
+﻿@model DWL_CRM.Models.Firma
+
+@{
+    ViewData["Title"] = "Firmendetails";
+    var geschaeftsfuehrer = Model.People
+        .Where(p => p.Geschaeftsfuehrers.Any())
+        .ToList();
+    var ansprechpersonen = Model.People
+        .Where(p => p.Ansprechpeople.Any())
+        .ToList();
+}
+
+<div class="page-header">
+    <h1 class="page-title">@Model.Firmenname</h1>
+    <div class="page-actions">
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.FirmaId">Firma bearbeiten</a>
+        <a class="btn btn-outline-secondary" asp-action="Index">Zur Firmenliste</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-7">
+        <section class="crm-card mb-4">
+            <h2 class="crm-card-title">Stammdaten</h2>
+            <dl class="row mb-0">
+                <dt class="col-sm-4">Firmenname</dt>
+                <dd class="col-sm-8">@Model.Firmenname</dd>
+
+                <dt class="col-sm-4">Adresse</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrWhiteSpace(Model.Strasse) ? Model.Strasse : "-")</dd>
+
+                <dt class="col-sm-4">Ort</dt>
+                <dd class="col-sm-8">@Model.Ort.Plz @Model.Ort.Ortsname</dd>
+
+                <dt class="col-sm-4">Branche</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrWhiteSpace(Model.Branche) ? Model.Branche : "-")</dd>
+
+                <dt class="col-sm-4">Gruendungsdatum</dt>
+                <dd class="col-sm-8">@(Model.Gruendungsdatum?.ToString("dd.MM.yyyy") ?? "-")</dd>
+
+                <dt class="col-sm-4">Jahresumsatz</dt>
+                <dd class="col-sm-8">@(Model.Jahresumsatz?.ToString("N2") ?? "-")</dd>
+
+                <dt class="col-sm-4">Bemerkungen</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrWhiteSpace(Model.Bemerkungen) ? Model.Bemerkungen : "-")</dd>
+            </dl>
+        </section>
+
+        <section class="crm-card mb-4">
+            <div class="section-header">
+                <h2 class="crm-card-title">Personen</h2>
+                <a class="btn btn-sm btn-outline-primary" asp-controller="People" asp-action="Create">Person anlegen</a>
+            </div>
+            @if (Model.People.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Kontakt</th>
+                                <th>Rollen</th>
+                                <th class="text-end">Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var person in Model.People.OrderBy(p => p.Nachname).ThenBy(p => p.Vorname))
+                            {
+                                <tr>
+                                    <td>@($"{person.Titel} {person.Vorname} {person.Nachname}".Trim())</td>
+                                    <td>
+                                        <div>@(string.IsNullOrWhiteSpace(person.Email) ? "-" : person.Email)</div>
+                                        <small class="text-muted">@(string.IsNullOrWhiteSpace(person.Telefon) ? "-" : person.Telefon)</small>
+                                    </td>
+                                    <td>
+                                        @if (person.Geschaeftsfuehrers.Any())
+                                        {
+                                            <span class="badge rounded-pill text-bg-primary me-1">Geschaeftsfuehrer</span>
+                                        }
+                                        @if (person.Ansprechpeople.Any())
+                                        {
+                                            <span class="badge rounded-pill text-bg-info">Ansprechperson</span>
+                                        }
+                                        @if (!person.Geschaeftsfuehrers.Any() && !person.Ansprechpeople.Any())
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-controller="People" asp-action="Edit" asp-route-id="@person.PersonId">Bearbeiten</a> |
+                                        <a asp-controller="People" asp-action="Details" asp-route-id="@person.PersonId">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="empty-state">Noch keine Personen hinterlegt.</p>
+            }
+        </section>
+    </div>
+
+    <div class="col-12 col-xl-5">
+        <section class="crm-card mb-4">
+            <div class="section-header">
+                <h2 class="crm-card-title">Geschaeftsfuehrer</h2>
+                <a class="btn btn-sm btn-outline-primary" asp-controller="Geschaeftsfuehrer" asp-action="Index">Verwalten</a>
+            </div>
+            @if (geschaeftsfuehrer.Any())
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var person in geschaeftsfuehrer)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>@($"{person.Titel} {person.Vorname} {person.Nachname}".Trim())</span>
+                            <a asp-controller="People" asp-action="Details" asp-route-id="@person.PersonId">Details</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="empty-state">Keine Geschaeftsfuehrer zugeordnet.</p>
+            }
+        </section>
+
+        <section class="crm-card mb-4">
+            <div class="section-header">
+                <h2 class="crm-card-title">Ansprechpersonen</h2>
+                <a class="btn btn-sm btn-outline-primary" asp-controller="Ansprechperson" asp-action="Index">Verwalten</a>
+            </div>
+            @if (ansprechpersonen.Any())
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var person in ansprechpersonen)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>@($"{person.Titel} {person.Vorname} {person.Nachname}".Trim())</span>
+                            <a asp-controller="People" asp-action="Details" asp-route-id="@person.PersonId">Details</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="empty-state">Keine Ansprechpersonen zugeordnet.</p>
+            }
+        </section>
+
+        <section class="crm-card">
+            <div class="section-header">
+                <h2 class="crm-card-title">Rechnungsdaten</h2>
+                <a class="btn btn-sm btn-outline-primary" asp-controller="Rechnungsdatens" asp-action="Index">Verwalten</a>
+            </div>
+            @if (Model.Rechnungsdaten != null)
+            {
+                <dl class="row mb-0">
+                    <dt class="col-sm-6">Rechnungen gesamt</dt>
+                    <dd class="col-sm-6">@Model.Rechnungsdaten.RechnungenGesamt?.ToString("N2")</dd>
+
+                    <dt class="col-sm-6">Rechnungen offen</dt>
+                    <dd class="col-sm-6">@Model.Rechnungsdaten.RechnungenOffen?.ToString("N2")</dd>
+
+                    <dt class="col-sm-6">Letzter Zahlungseingang</dt>
+                    <dd class="col-sm-6">@(Model.Rechnungsdaten.LetzterZahlungseingang?.ToString("dd.MM.yyyy") ?? "-")</dd>
+                </dl>
+            }
+            else
+            {
+                <p class="empty-state">Keine Rechnungsdaten hinterlegt.</p>
+            }
+        </section>
+    </div>
+</div>
