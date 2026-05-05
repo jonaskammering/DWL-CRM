@@ -1,15 +1,19 @@
 ﻿@model IEnumerable<DWL_CRM.Models.Firma>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Firmen";
 }
 
-<h1>Index</h1>
+<div class="page-header">
+    <h1 class="page-title">Firmen</h1>
+    <div class="page-actions">
+        <a class="btn btn-primary" asp-action="Create">Firma anlegen</a>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="crm-card">
+<div class="table-responsive">
+<table class="table table-hover align-middle mb-0">
     <thead>
         <tr>
             <th>
@@ -58,14 +62,16 @@
                 @Html.DisplayFor(modelItem => item.Bemerkungen)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Ort.OrtId)
+                @(item.Ort != null ? $"{item.Ort.Plz} {item.Ort.Ortsname}" : "-")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FirmaId">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.FirmaId">Bearbeiten</a> |
                 <a asp-action="Details" asp-route-id="@item.FirmaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FirmaId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.FirmaId">Loeschen</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>
+</div>

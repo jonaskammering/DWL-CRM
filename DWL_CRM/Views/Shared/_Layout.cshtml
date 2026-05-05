@@ -4,44 +4,50 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DWL CRM</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Firma" asp-action="Index">DWL CRM</a>
+        <nav class="navbar navbar-expand-lg border-bottom shadow-sm">
+            <div class="container py-1">
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-controller="Firma" asp-action="Index">
+                    <img src="~/assets/branding/dwl_logo_blau_3c.png" alt="DWL Logo" class="brand-logo" />
+                    <span class="brand-text">CRM</span>
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarContent" aria-expanded="false" aria-label="Navigation umschalten">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="navbarContent">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between" id="navbarContent">
+                    <ul class="navbar-nav flex-grow-1 gap-lg-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Firma" asp-action="Index">Firmen</a>
+                            <a class="nav-link" asp-controller="Firma" asp-action="Index">Firmen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Ort" asp-action="Index">Orte</a>
+                            <a class="nav-link" asp-controller="Ort" asp-action="Index">Orte</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="People" asp-action="Index">Personen</a>
+                            <a class="nav-link" asp-controller="People" asp-action="Index">Personen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Ansprechperson" asp-action="Index">Ansprechpersonen</a>
+                            <a class="nav-link" asp-controller="Ansprechperson" asp-action="Index">Ansprechpersonen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Geschaeftsfuehrer" asp-action="Index">Geschaeftsfuehrer</a>
+                            <a class="nav-link" asp-controller="Geschaeftsfuehrer" asp-action="Index">Geschaeftsfuehrer</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Rechnungsdatens" asp-action="Index">Rechnungen</a>
+                            <a class="nav-link" asp-controller="Rechnungsdatens" asp-action="Index">Rechnungen</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        <div class="ci-hero-band"></div>
     </header>
 
-    <div class="container pb-3">
+    <div class="container py-4">
         <main role="main">
             @RenderBody()
         </main>

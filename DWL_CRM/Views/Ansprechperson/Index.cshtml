@@ -1,15 +1,19 @@
 ﻿@model IEnumerable<DWL_CRM.Models.Ansprechperson>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Ansprechpersonen";
 }
 
-<h1>Index</h1>
+<div class="page-header">
+    <h1 class="page-title">Ansprechpersonen</h1>
+    <div class="page-actions">
+        <a class="btn btn-primary" asp-action="Create">Zuordnung anlegen</a>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="crm-card">
+<div class="table-responsive">
+<table class="table table-hover align-middle mb-0">
     <thead>
         <tr>
             <th>
@@ -22,14 +26,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Person.PersonId)
+                @(item.Person != null ? $"{item.Person.Vorname} {item.Person.Nachname}".Trim() : "-")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AnsprechpersonId">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.AnsprechpersonId">Bearbeiten</a> |
                 <a asp-action="Details" asp-route-id="@item.AnsprechpersonId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AnsprechpersonId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.AnsprechpersonId">Loeschen</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>
+</div>

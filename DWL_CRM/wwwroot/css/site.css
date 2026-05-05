@@ -1,39 +1,133 @@
+:root {
+  --dwl-blue: #110532;
+  --dwl-white: #ffffff;
+  --dwl-yellow: #f2c966;
+  --dwl-rose: #ebaaa0;
+  --dwl-red: #f43653;
+  --dwl-turquoise: #49c6bb;
+  --dwl-beige: #d8c5c4;
+  --dwl-khaki: #aecdc5;
+  --surface: #f5f2f2;
+  --surface-card: #ffffff;
+  --text-main: #201b34;
+  --text-muted: #6f6a83;
+  --border-soft: #e7e1ea;
+}
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("/fonts/SuisseIntl-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("/fonts/SuisseIntl-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SuisseIntl";
+  src: url("/fonts/SuisseIntl-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
+  font-size: 16px;
   position: relative;
   min-height: 100%;
 }
 
 body {
+  font-family: "SuisseIntl", "Segoe UI", Arial, sans-serif;
   margin-bottom: 0;
-  background-color: #f6f8fb;
-  color: #1f2937;
+  background-color: var(--surface);
+  color: var(--text-main);
+}
+
+a {
+  color: var(--dwl-blue);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: #29155f;
 }
 
 .navbar {
-  background-color: #ffffff !important;
+  background-color: var(--dwl-white);
 }
 
-.navbar-brand {
+.brand-logo {
+  height: 28px;
+  width: auto;
+}
+
+.brand-text {
+  color: var(--dwl-blue);
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.04em;
 }
 
-.nav-link {
+.navbar .nav-link {
+  color: var(--text-main);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
   font-weight: 500;
+}
+
+.navbar .nav-link:hover {
+  background-color: #ede9f6;
+  color: var(--dwl-blue);
+}
+
+.ci-hero-band {
+  height: 72px;
+  background-image: linear-gradient(90deg, rgba(17, 5, 50, 0.92), rgba(17, 5, 50, 0.72)), url("/assets/graphics/supergrafik2.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.btn {
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: var(--dwl-blue);
+  border-color: var(--dwl-blue);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #27105f;
+  border-color: #27105f;
+}
+
+.btn-outline-secondary {
+  color: var(--dwl-blue);
+  border-color: #cfc3e7;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #ede9f6;
+  border-color: #cfc3e7;
+  color: var(--dwl-blue);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--dwl-blue);
+  font-weight: 700;
 }
 
 .page-header {
@@ -46,7 +140,7 @@ body {
 
 .page-title {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 700;
 }
 
@@ -57,11 +151,11 @@ body {
 }
 
 .crm-card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 1.2rem;
-  box-shadow: 0 6px 22px rgba(15, 23, 42, 0.05);
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 28px rgba(17, 5, 50, 0.08);
 }
 
 .crm-card-title {
@@ -80,24 +174,64 @@ body {
 
 .empty-state {
   margin: 0;
-  color: #6b7280;
+  color: var(--text-muted);
+}
+
+.table {
+  --bs-table-bg: transparent;
 }
 
 table.table thead th {
-  color: #4b5563;
-  font-size: 0.86rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  border-bottom-width: 1px;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-soft);
+  font-weight: 500;
+}
+
+table.table tbody tr:hover {
+  background-color: #f6f1ff;
 }
 
 table.table td {
   vertical-align: middle;
 }
 
+.list-group-item {
+  border-color: var(--border-soft);
+}
+
+.badge.text-bg-primary {
+  background-color: var(--dwl-blue) !important;
+}
+
+.badge.text-bg-info {
+  background-color: var(--dwl-turquoise) !important;
+  color: var(--dwl-blue) !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-check-input:focus {
+  border-color: #9f89d5;
+  box-shadow: 0 0 0 0.2rem rgba(73, 198, 187, 0.2);
+}
+
 @media (max-width: 768px) {
   .page-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .ci-hero-band {
+    height: 48px;
+  }
+
+  .brand-logo {
+    height: 24px;
   }
 }

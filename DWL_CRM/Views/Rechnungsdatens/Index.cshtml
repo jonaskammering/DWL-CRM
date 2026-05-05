@@ -1,15 +1,19 @@
 ﻿@model IEnumerable<DWL_CRM.Models.Rechnungsdaten>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Rechnungen";
 }
 
-<h1>Index</h1>
+<div class="page-header">
+    <h1 class="page-title">Rechnungen</h1>
+    <div class="page-actions">
+        <a class="btn btn-primary" asp-action="Create">Rechnungseintrag anlegen</a>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="crm-card">
+<div class="table-responsive">
+<table class="table table-hover align-middle mb-0">
     <thead>
         <tr>
             <th>
@@ -40,14 +44,16 @@
                 @Html.DisplayFor(modelItem => item.LetzterZahlungseingang)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Firma.FirmaId)
+                @(item.Firma?.Firmenname ?? "-")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.RechnungsdatenId">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.RechnungsdatenId">Bearbeiten</a> |
                 <a asp-action="Details" asp-route-id="@item.RechnungsdatenId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RechnungsdatenId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.RechnungsdatenId">Loeschen</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</div>
+</div>
